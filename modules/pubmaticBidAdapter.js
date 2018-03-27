@@ -170,6 +170,11 @@ const PubmaticAdapter = function PubmaticAdapter() {
     _initUserSync(conf.pubId);
   }
 
+  function _replaceAuctionPriceMacro(cpm, val) {
+    /* eslint-disable no-template-curly-in-string */
+    return val ? val.split('${AUCTION_PRICE}').join(cpm) : val;
+  }
+
   $$PREBID_GLOBAL$$.handlePubmaticCallback = function(bidDetailsMap, progKeyValueMap) {
     var i;
     var adUnit;
@@ -206,8 +211,8 @@ const PubmaticAdapter = function PubmaticAdapter() {
         adResponse.bidderCode = 'pubmatic';
         adResponse.adSlot = bid.adSlot;
         adResponse.cpm = Number(adUnitInfo.bid);
-        adResponse.ad = unescape(adUnit.creative_tag);
-        adResponse.ad += utils.createTrackPixelIframeHtml(decodeURIComponent(adUnit.tracking_url));
+        adResponse.ad = unescape(_replaceAuctionPriceMacro(adUnitInfo.bid, adUnit.creative_tag));
+        adResponse.ad += utils.createTrackPixelIframeHtml(decodeURIComponent(_replaceAuctionPriceMacro(adUnitInfo.bid, adUnit.tracking_url)));
         adResponse.width = adUnit.width;
         adResponse.height = adUnit.height;
         adResponse.dealId = adUnitInfo.wdeal;
