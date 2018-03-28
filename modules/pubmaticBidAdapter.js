@@ -171,8 +171,10 @@ const PubmaticAdapter = function PubmaticAdapter() {
   }
 
   function _replaceAuctionPriceMacro(cpm, val) {
-    /* eslint-disable no-template-curly-in-string */
-    return val ? val.split('${AUCTION_PRICE}').join(cpm) : val;
+    if (val && isNaN(val)) {
+      return val.replace(/\${AUCTION_PRICE}/g, cpm);
+    }
+    return val;
   }
 
   $$PREBID_GLOBAL$$.handlePubmaticCallback = function(bidDetailsMap, progKeyValueMap) {
@@ -189,6 +191,7 @@ const PubmaticAdapter = function PubmaticAdapter() {
 
     for (i = 0; i < bids.length; i++) {
       var adResponse;
+      var adString = '';
       bid = bids[i].params;
       adUnit = bidResponseMap[bid.adSlot] || {};
       // adUnitInfo example: bidstatus=0;bid=0.0000;bidid=39620189@320x50;wdeal=
@@ -211,8 +214,9 @@ const PubmaticAdapter = function PubmaticAdapter() {
         adResponse.bidderCode = 'pubmatic';
         adResponse.adSlot = bid.adSlot;
         adResponse.cpm = Number(adUnitInfo.bid);
-        adResponse.ad = unescape(_replaceAuctionPriceMacro(adUnitInfo.bid, adUnit.creative_tag));
-        adResponse.ad += utils.createTrackPixelIframeHtml(decodeURIComponent(_replaceAuctionPriceMacro(adUnitInfo.bid, adUnit.tracking_url)));
+        adString = unescape(adUnit.creative_tag);
+        adString += utils.createTrackPixelIframeHtml(decodeURIComponent(adUnit.tracking_url));
+        adResponse.ad = _replaceAuctionPriceMacro(adUnitInfo.bid, adString);
         adResponse.width = adUnit.width;
         adResponse.height = adUnit.height;
         adResponse.dealId = adUnitInfo.wdeal;
