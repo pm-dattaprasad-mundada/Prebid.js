@@ -11215,6 +11215,7 @@ webpackJsonp([1], Array(54).concat([function(e, t, i) {
                 window.googletag.cmd.push(function() {
                     console.log("In refreshBids", new Date());
                     console.log("Calling Amazon Fetchbids", new Date());
+                    divIds.push("out-of-page");
                     notifyId = window.OWT.registerExternalBidders(divIds);
                     window.apstag.fetchBids({
                         slots: t.getAmazonBids(e),
