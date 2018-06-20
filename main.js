@@ -11111,7 +11111,9 @@ webpackJsonp([1], Array(54).concat([function(e, t, i) {
                   , notifyId = null;
 
                t.refreshBids(e, i, a);
-               notifyId = window.OWT.registerExternalBidders(divIds)
+               setTimeout(function() {
+                 notifyId = window.OWT.registerExternalBidders(divIds);
+               }, 250);
                 window.apstag.fetchBids({
                     slots: n,
                     timeout: 2e3
@@ -13688,7 +13690,9 @@ webpackJsonp([1], Array(54).concat([function(e, t, i) {
                 , notifyId = null;
 
              t.refreshBids(e, i, a);
-             notifyId = window.OWT.registerExternalBidders(divIds)
+             setTimeout(function() {
+               notifyId = window.OWT.registerExternalBidders(divIds);
+             }, 250);
               window.apstag.fetchBids({
                   slots: n,
                   timeout: 2e3
@@ -14115,7 +14119,9 @@ webpackJsonp([1], Array(54).concat([function(e, t, i) {
                 , notifyId = null;
 
              t.refreshBids(e, i, a);
-             notifyId = window.OWT.registerExternalBidders(divIds)
+             setTimeout(function() {
+               notifyId = window.OWT.registerExternalBidders(divIds);
+             }, 250);
               window.apstag.fetchBids({
                   slots: n,
                   timeout: 2e3
