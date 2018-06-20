@@ -11110,10 +11110,12 @@ webpackJsonp([1], Array(54).concat([function(e, t, i) {
                   , divIds =  e.map(obj => obj.id)                                                            // Added Code
                   , notifyId = null;
 
+              console.log("time: ", (new Date()).getTime());
                t.refreshBids(e, i, a);
                setTimeout(function() {
                  notifyId = window.OWT.registerExternalBidders(divIds);
                }, 250);
+
                 window.apstag.fetchBids({
                     slots: n,
                     timeout: 2e3
@@ -11306,8 +11308,7 @@ webpackJsonp([1], Array(54).concat([function(e, t, i) {
                     e.displayed = !0
                 }),
                 a = a && a.length ? a : null,
-                i && window.googletag.display("out-of-page"),
-                t && window.googletag.pubads().refresh(a)
+                i && window.googletag.display("out-of-page")
             },
             setAdUnitCode: function(e) {
                 this.adUnitCode = e ? "/6117/hunker.mw/" : "/6117/hunker/"
