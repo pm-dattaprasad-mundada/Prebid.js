@@ -11399,7 +11399,7 @@ webpackJsonp([1], Array(54).concat([function(e, t, i) {
                 window.apstag.init({
                     pubID: "3066",
                     adServer: "googletag",
-                    bidTimeout: 10
+                    bidTimeout: 100
                 })
             }
         }
