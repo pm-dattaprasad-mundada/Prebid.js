@@ -11103,31 +11103,22 @@ webpackJsonp([1], Array(54).concat([function(e, t, i) {
                 })
             },
             display: function(e) {
-              var t = this
-                , i = arguments.length > 1 && void 0 !== arguments[1] && arguments[1]
-                , a = this.getAmazonBids(e)
-                , notifyId = null
-                , divIds =  e.map(obj => obj.id);
+                var t = this
+                  , i = arguments.length > 1 && void 0 !== arguments[1] && arguments[1]
+                  , a = arguments.length > 2 && void 0 !== arguments[2] && arguments[2]
+                  , n = this.getAmazonBids(e)
+                  , divIds =  e.map(obj => obj.id)                                                            // Added Code
+                  , notifyId = null;
 
-                window.OWT ={
-                  registerExternalBidders: function() {
-                    return 1;
-                  },
-                  notifyExternalBiddingComplete: function () {
-                    return 1;
-                  }
-                };
-              // On Some condition inclued out-of-page slot in div Array
-              i && divIds.push('out-of-page');
-              notifyId = window.OWT.registerExternalBidders(divIds);
-              t.refreshBids(e, i);
-              this.getAPSTag().fetchBids({
-                  slots: a,
-                  timeout: 900
-              }, function(a) {
-                  window.OWT.notifyExternalBiddingComplete(notifyId);
-                  // t.refreshBids(e, i)
-              })
+               t.refreshBids(e, i, a);
+               notifyId = window.OWT.registerExternalBidders(divIds)
+                window.apstag.fetchBids({
+                    slots: n,
+                    timeout: 2e3
+                }, function(n) {
+                    window.OWT.notifyExternalBiddingComplete(notifyId);
+                    // t.refreshBids(e, i, a)
+                })
             },
             getAmazonBids: function(e) {
                 var t = this;
@@ -13689,31 +13680,22 @@ webpackJsonp([1], Array(54).concat([function(e, t, i) {
         }, {
             key: "display",
             value: function(e) {
-                var t = this
-                  , i = arguments.length > 1 && void 0 !== arguments[1] && arguments[1]
-                  , a = this.getAmazonBids(e)
-                  , notifyId = null
-                  , divIds =  e.map(obj => obj.id);
+              var t = this
+                , i = arguments.length > 1 && void 0 !== arguments[1] && arguments[1]
+                , a = arguments.length > 2 && void 0 !== arguments[2] && arguments[2]
+                , n = this.getAmazonBids(e)
+                , divIds =  e.map(obj => obj.id)                                                            // Added Code
+                , notifyId = null;
 
-                  window.OWT ={
-                    registerExternalBidders: function() {
-                      return 1;
-                    },
-                    notifyExternalBiddingComplete: function () {
-                      return 1;
-                    }
-                  };
-                // On Some condition inclued out-of-page slot in div Array
-                i && divIds.push('out-of-page');
-                notifyId = window.OWT.registerExternalBidders(divIds);
-                t.refreshBids(e, i);
-                this.getAPSTag().fetchBids({
-                    slots: a,
-                    timeout: 900
-                }, function(a) {
-                    window.OWT.notifyExternalBiddingComplete(notifyId);
-                    // t.refreshBids(e, i)
-                })
+             t.refreshBids(e, i, a);
+             notifyId = window.OWT.registerExternalBidders(divIds)
+              window.apstag.fetchBids({
+                  slots: n,
+                  timeout: 2e3
+              }, function(n) {
+                  window.OWT.notifyExternalBiddingComplete(notifyId);
+                  // t.refreshBids(e, i, a)
+              })
             }
         }, {
             key: "refreshBids",
@@ -14127,28 +14109,19 @@ webpackJsonp([1], Array(54).concat([function(e, t, i) {
             display: function(e) {
               var t = this
                 , i = arguments.length > 1 && void 0 !== arguments[1] && arguments[1]
-                , a = this.getAmazonBids(e)
-                , notifyId = null
-                , divIds =  e.map(obj => obj.id);
+                , a = arguments.length > 2 && void 0 !== arguments[2] && arguments[2]
+                , n = this.getAmazonBids(e)
+                , divIds =  e.map(obj => obj.id)                                                            // Added Code
+                , notifyId = null;
 
-              window.OWT ={
-                registerExternalBidders: function() {
-                  return 1;
-                },
-                notifyExternalBiddingComplete: function () {
-                  return 1;
-                }
-              };
-              // On Some condition inclued out-of-page slot in div Array
-              i && divIds.push('out-of-page');
-              notifyId = window.OWT.registerExternalBidders(divIds);
-              t.refreshBids(e, i);
-              this.getAPSTag().fetchBids({
-                  slots: a,
-                  timeout: 900
-              }, function(a) {
+             t.refreshBids(e, i, a);
+             notifyId = window.OWT.registerExternalBidders(divIds)
+              window.apstag.fetchBids({
+                  slots: n,
+                  timeout: 2e3
+              }, function(n) {
                   window.OWT.notifyExternalBiddingComplete(notifyId);
-                  // t.refreshBids(e, i)
+                  // t.refreshBids(e, i, a)
               })
             },
             getAmazonBids: function(e) {
