@@ -11110,8 +11110,12 @@ webpackJsonp([1], Array(54).concat([function(e, t, i) {
                 , divIds =  e.map(obj => obj.id);
 
                 window.OWT ={
-                  registerExternalBidders: null,
-                  notifyExternalBiddingComplete: null
+                  registerExternalBidders: function() {
+                    return 1;
+                  },
+                  notifyExternalBiddingComplete: function () {
+                    return 1;
+                  }
                 };
               // On Some condition inclued out-of-page slot in div Array
               i && divIds.push('out-of-page');
@@ -13692,8 +13696,12 @@ webpackJsonp([1], Array(54).concat([function(e, t, i) {
                   , divIds =  e.map(obj => obj.id);
 
                   window.OWT ={
-                    registerExternalBidders: null,
-                    notifyExternalBiddingComplete: null
+                    registerExternalBidders: function() {
+                      return 1;
+                    },
+                    notifyExternalBiddingComplete: function () {
+                      return 1;
+                    }
                   };
                 // On Some condition inclued out-of-page slot in div Array
                 i && divIds.push('out-of-page');
@@ -14124,8 +14132,12 @@ webpackJsonp([1], Array(54).concat([function(e, t, i) {
                 , divIds =  e.map(obj => obj.id);
 
               window.OWT ={
-                registerExternalBidders: null,
-                notifyExternalBiddingComplete: null
+                registerExternalBidders: function() {
+                  return 1;
+                },
+                notifyExternalBiddingComplete: function () {
+                  return 1;
+                }
               };
               // On Some condition inclued out-of-page slot in div Array
               i && divIds.push('out-of-page');
