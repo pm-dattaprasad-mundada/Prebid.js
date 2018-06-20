@@ -5375,18 +5375,18 @@ webpackJsonp([1], Array(54).concat([function(e, t, i) {
     function c(e) {
         var t = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : {}
           , i = arguments.length > 2 && void 0 !== arguments[2] ? arguments[2] : 0
-          , a = arguments.length > 3 && void 0 !== arguments[3] ? arguments[3] : 0
+          , a = arguments.length > 3 && void 0 !== arguments[3] ? arguments[3] : {}
           , n = (0,
         v.default)(t, "linkUnitSlot", 9e3) === i;
-        return e && n && 0 === a
+        return e && n && !a.isInfinite
     }
     function u(e) {
         var t = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : {}
           , i = arguments.length > 2 && void 0 !== arguments[2] ? arguments[2] : 0
-          , a = arguments.length > 3 && void 0 !== arguments[3] ? arguments[3] : 0
+          , a = arguments.length > 3 && void 0 !== arguments[3] ? arguments[3] : {}
           , n = (0,
         v.default)(t, "jwPlayerSlot", 9e3) === i;
-        return e && n && 0 === a
+        return e && n && !a.isInfinite
     }
     function d(e) {
         return {
@@ -5428,7 +5428,7 @@ webpackJsonp([1], Array(54).concat([function(e, t, i) {
     function h() {
         var e = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : {}
           , t = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : {}
-          , i = arguments.length > 2 && void 0 !== arguments[2] ? arguments[2] : 0
+          , i = arguments.length > 2 && void 0 !== arguments[2] ? arguments[2] : {}
           , a = (0,
         v.default)(e, "format", "").toLowerCase();
         if ("articles" !== a && "article" !== a)
@@ -5531,37 +5531,35 @@ webpackJsonp([1], Array(54).concat([function(e, t, i) {
     }
     function n() {
         var e = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : {}
-          , t = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : {}
-          , i = arguments.length > 2 && void 0 !== arguments[2] ? arguments[2] : 0;
+          , t = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : {};
+        arguments.length > 2 && void 0 !== arguments[2] && arguments[2];
         if ("leaf_migrated" !== (0,
         o.default)(e, "content_origin", "").toLowerCase())
             return e;
-        if (0 !== i)
-            return e;
-        var n = []
-          , r = (0,
+        var i = []
+          , n = (0,
         o.default)(t, "ads.jwPlayer", {})
+          , r = 0
           , s = 0
-          , l = 0
-          , c = !1;
+          , l = !1;
         return (0,
         o.default)(e, "content", []).forEach(function(e) {
-            n.push(e),
+            i.push(e),
             "content" === (0,
-            o.default)(e, "type", "") && s++,
-            l || "image" !== (0,
-            o.default)(e, "type", "") || l++,
-            a(s, l) && (c || n.push({
+            o.default)(e, "type", "") && r++,
+            s || "image" !== (0,
+            o.default)(e, "type", "") || s++,
+            a(r, s) && (l || i.push({
                 type: "jwplayer",
-                videoLabel: r.videoLabel,
-                playerUrl: r.desktop.playerUrl,
-                playlistUrl: r.playlistUrl,
-                bidderName: r.bidderName,
-                bidderId: r.bidderId
+                videoLabel: n.videoLabel,
+                playerUrl: n.desktop.playerUrl,
+                playlistUrl: n.playlistUrl,
+                bidderName: n.bidderName,
+                bidderId: n.bidderId
             }),
-            c = !0)
+            l = !0)
         }),
-        e.content = n,
+        e.content = i,
         e
     }
     Object.defineProperty(t, "__esModule", {
@@ -5768,15 +5766,27 @@ webpackJsonp([1], Array(54).concat([function(e, t, i) {
                       , n = t.getters
                       , r = i.slug
                       , o = i.requiredType
-                      , s = i.index;
+                      , l = i.index;
                     return Promise.all([e.fetchArticle({
                         getters: n,
-                        slug: r
+                        slug: r,
+                        commit: a
+                    }).catch(function(e) {
+                        return e
                     }), e.fetchMoreLikeThis({
                         getters: n,
                         slug: r,
-                        requiredType: o
-                    })]).then(e.fetchArticleAndRCPSuccessfulResolver(a, n, s)).catch(e.fetchArticleAndRCPErrorResolver(a, r))
+                        requiredType: o,
+                        commit: a
+                    }).catch(function(e) {
+                        return e
+                    })]).then(function(t) {
+                        if (301 === (0,
+                        s.default)(t[0], "body.code", ""))
+                            return e.fetchArticleAndRCPErrorResolver(a, r)(t[0]);
+                        !1 === t[0] && a("SET_SHOW_500", !0),
+                        e.fetchArticleAndRCPSuccessfulResolver(a, n, l)(t)
+                    })
                 }
             }
         }, {
@@ -5805,11 +5815,11 @@ webpackJsonp([1], Array(54).concat([function(e, t, i) {
             key: "fetchArticleAndRCPErrorResolver",
             value: function(e, t) {
                 var i = this;
-                return function(a) {
-                    var n = (0,
-                    s.default)(a, "body.to_location", !1);
-                    return n ? i.redirect(t, n) : (e("NOT_FOUND", 404),
-                    i.notFound(t))
+                return function(e) {
+                    var a = (0,
+                    s.default)(e, "body.to_location", !1);
+                    if (a)
+                        return i.redirect(t, a)
                 }
             }
         }, {
@@ -5845,10 +5855,22 @@ webpackJsonp([1], Array(54).concat([function(e, t, i) {
             key: "fetchArticle",
             value: function(e) {
                 var t = e.getters
-                  , i = e.slug;
+                  , i = e.slug
+                  , a = e.commit;
                 return (0,
                 s.default)(t, "SDK", {}).articleRetrieve({
                     slug: i
+                }).then(function(e) {
+                    return e
+                }).catch(function(e) {
+                    if (404 !== (0,
+                    s.default)(e, "response.statusCode", 200))
+                        return (0,
+                        s.default)(e, "body.to_location", !1) ? e : (a("SET_STATUS", {
+                            status: 500
+                        }),
+                        !1);
+                    a("NOT_FOUND")
                 })
             }
         }, {
@@ -5857,15 +5879,21 @@ webpackJsonp([1], Array(54).concat([function(e, t, i) {
                 var t = e.getters
                   , i = e.slug
                   , a = e.requiredType
-                  , n = (0,
+                  , n = e.commit
+                  , r = (0,
                 s.default)(t, "SDK", {})
-                  , r = {
+                  , o = {
                     excludeSlug: i,
                     category: ""
                 };
-                return a && (r.requiredType = a),
-                n.getMoreLikeThis(r).catch(function(e) {
+                return a && (o.requiredType = a),
+                r.getMoreLikeThis(o).then(function(e) {
                     return e
+                }).catch(function(e) {
+                    return n("SET_STATUS", {
+                        status: 500
+                    }),
+                    !1
                 })
             }
         }, {
@@ -6324,12 +6352,14 @@ webpackJsonp([1], Array(54).concat([function(e, t, i) {
                 var i = t.article
                   , a = t.moreLikeThis
                   , n = t.mutators
-                  , r = t.config
-                  , o = t.index;
+                  , r = t.config;
+                t.index;
                 i.related_content = a || [],
                 n = n || [],
-                e.articles.push(n.reduce(function(e, t) {
-                    return t(e, r, o)
+                e.articles.push(n.reduce(function(t, i) {
+                    return i(t, r, {
+                        isInfinite: e.infiniteScrollArticles.length > 0
+                    })
                 }, i))
             }
         }, {
@@ -6607,34 +6637,39 @@ webpackJsonp([1], Array(54).concat([function(e, t, i) {
                     var a = t.dispatch
                       , n = t.commit
                       , r = t.getters
-                      , o = i.slug
-                      , s = i.name
-                      , l = i.type
-                      , c = i.query
-                      , u = i.page
-                      , d = i.limit
-                      , f = i.hasPagination
-                      , p = i.concat
-                      , h = i.contentType
-                      , m = i.key
-                      , g = i.newContent
-                      , v = r.SDK
-                      , y = e.searchParameterFactory({
-                        slug: o,
-                        name: s,
-                        type: l,
-                        query: c,
-                        page: u,
-                        limit: d,
-                        hasPagination: f,
-                        concat: p,
-                        contentType: h,
-                        key: m,
-                        newContent: g
+                      , o = i.limit
+                      , s = i.page
+                      , l = i.sort
+                      , c = i.fields
+                      , u = i.contentType
+                      , d = i.newContent
+                      , f = i.excludes
+                      , p = void 0 === f ? "" : f
+                      , h = i.concat
+                      , m = i.hasPagination
+                      , g = i.key
+                      , v = i.name
+                      , y = i.query
+                      , b = i.slug
+                      , _ = i.type
+                      , w = r.SDK
+                      , C = ["subcategory", "subsubcategory", "search"].includes(_)
+                      , S = e.searchParameterFactory({
+                        limit: o,
+                        page: s,
+                        sort: l,
+                        fields: c,
+                        contentType: u,
+                        newContent: d,
+                        excludes: p,
+                        name: v,
+                        query: y,
+                        revealHidden: C,
+                        type: _
                     });
-                    return m = m || "recent",
-                    "category" === l || "subcategory" === l || "subsubcategory" === l ? m = o : "search" === l && (m = l),
-                    v.searchRetrieve(y).then(e.fetchArticleCollectionResolver(a, n, m, f, p)).catch(e.fetchArticleCollectionError(a, m))
+                    return g = g || "recent",
+                    "category" === _ || "subcategory" === _ || "subsubcategory" === _ ? g = b : "search" === _ && (g = _),
+                    w.searchRetrieve(S).then(e.fetchArticleCollectionResolver(a, n, g, m, h)).catch(e.fetchArticleCollectionError(a, n, g))
                 }
             }
         }, {
@@ -6699,29 +6734,43 @@ webpackJsonp([1], Array(54).concat([function(e, t, i) {
         }, {
             key: "searchParameterFactory",
             value: function(e) {
-                var t = (e.slug,
-                e.name)
-                  , i = e.type
-                  , a = e.query
-                  , n = e.page
-                  , r = e.limit
-                  , o = (e.hasPagination,
-                e.contentType)
-                  , s = e.newContent;
-                r = (0,
-                c.default)(Number(r)) ? 36 : Number(r),
-                n = (0,
-                c.default)(Number(n)) ? 1 : Number(n);
-                var l = {
-                    limit: r,
-                    page: n,
-                    fields: this.getSearchFields()
+                var t = e.limit
+                  , i = e.page
+                  , a = e.sort
+                  , n = e.fields
+                  , r = e.contentType
+                  , o = e.newContent
+                  , s = e.excludes
+                  , l = e.name
+                  , u = e.query
+                  , d = e.revealHidden
+                  , f = e.type;
+                t = (0,
+                c.default)(Number(t)) ? 36 : Number(t),
+                i = (0,
+                c.default)(Number(i)) ? 1 : Number(i),
+                n = n || this.getSearchFields();
+                var p = {
+                    limit: t,
+                    page: i,
+                    fields: n,
+                    sort: a,
+                    revealHidden: d,
+                    excludes: s
                 };
-                return "search" === i && a ? (l.keywords = a,
-                t && (l.category = t)) : "category" === i ? l.category = t : "subcategory" === i ? l.subCategory = t : "subsubcategory" === i && (l.subSubCategory = t),
-                o && (l.contentType = o),
-                s && (l.newContent = !0),
-                l
+                if (l) {
+                    var h = {
+                        search: "category",
+                        category: "category",
+                        subcategory: "subCategory",
+                        subsubcategory: "subSubCategory"
+                    };
+                    p[f ? h[f] : "category"] = l
+                }
+                return "search" === f && u && (p.keywords = u),
+                r && (p.contentType = r),
+                o && (p.newContent = !0),
+                p
             }
         }, {
             key: "fetchArticleCollectionResolver",
@@ -6737,19 +6786,24 @@ webpackJsonp([1], Array(54).concat([function(e, t, i) {
             }
         }, {
             key: "fetchArticleCollectionError",
-            value: function(e, t) {
-                return function(i) {
-                    if ("search" === t) {
+            value: function(e, t, i) {
+                return function(a) {
+                    if ("search" === i) {
                         return e("FETCH_ARTICLE_COLLECTION", {
                             limit: 12
                         })
                     }
+                    500 === (0,
+                    s.default)(a, "body.code", 500) && (t("SET_SHOW_500", !0),
+                    t("SET_STATUS", {
+                        status: 500
+                    }))
                 }
             }
         }, {
             key: "getSearchFields",
             value: function() {
-                return ["view.id", "view.title", "view.slug", "view.summary", "view.writer", "view.image.url", "view.image.alttext", "view.category.slug", "view.category.name", "view.subcategory.slug", "view.subcategory.name"].join(",")
+                return ["view.id", "view.title", "view.slug", "view.summary", "view.writer", "view.image.url", "view.image.alttext", "view.category.slug", "view.category.name", "view.subcategory.slug", "view.subcategory.name", "view.subsubcategory.slug", "view.subsubcategory.name"].join(",")
             }
         }]),
         e
@@ -6763,14 +6817,31 @@ webpackJsonp([1], Array(54).concat([function(e, t, i) {
             default: e
         }
     }
-    function n(e, t) {
+    function n(e, t, i) {
+        return t in e ? Object.defineProperty(e, t, {
+            value: i,
+            enumerable: !0,
+            configurable: !0,
+            writable: !0
+        }) : e[t] = i,
+        e
+    }
+    function r(e, t) {
         if (!(e instanceof t))
             throw new TypeError("Cannot call a class as a function")
     }
     Object.defineProperty(t, "__esModule", {
         value: !0
     });
-    var r = function() {
+    var o = Object.assign || function(e) {
+        for (var t = 1; t < arguments.length; t++) {
+            var i = arguments[t];
+            for (var a in i)
+                Object.prototype.hasOwnProperty.call(i, a) && (e[a] = i[a])
+        }
+        return e
+    }
+      , s = function() {
         function e(e, t) {
             for (var i = 0; i < t.length; i++) {
                 var a = t[i];
@@ -6786,15 +6857,15 @@ webpackJsonp([1], Array(54).concat([function(e, t, i) {
             t
         }
     }()
-      , o = i(2)
-      , s = a(o)
-      , l = i(146)
+      , l = i(2)
       , c = a(l)
-      , u = function() {
+      , u = i(146)
+      , d = a(u)
+      , f = function() {
         function e() {
-            n(this, e)
+            r(this, e)
         }
-        return r(e, [{
+        return s(e, [{
             key: "getMutations",
             value: function() {
                 return {
@@ -6813,21 +6884,25 @@ webpackJsonp([1], Array(54).concat([function(e, t, i) {
                 return function(e, t) {
                     var i = t.data
                       , a = t.key
-                      , n = t.hasPagination;
-                    t.concat ? e.articles[a] = e.articles[a].concat((0,
-                    s.default)(i, "results", [])) : (e.articles = {},
-                    e.articles[a] = (0,
-                    s.default)(i, "results", [])),
-                    n && (e.meta = (0,
-                    c.default)(i, "results", {}),
+                      , r = t.hasPagination;
+                    if (t.concat) {
+                        var s = e.articles[a].concat((0,
+                        c.default)(i, "results", []));
+                        e.articles = o({}, e.articles, n({}, a, s))
+                    } else
+                        e.articles = {},
+                        e.articles[a] = (0,
+                        c.default)(i, "results", []);
+                    r && (e.meta = (0,
+                    d.default)(i, "results", {}),
                     e.page = (0,
-                    s.default)(i, "meta.page", 1))
+                    c.default)(i, "meta.page", 1))
                 }
             }
         }]),
         e
     }();
-    t.default = u
+    t.default = f
 }
 , function(e, t, i) {
     "use strict";
@@ -7477,12 +7552,14 @@ webpackJsonp([1], Array(54).concat([function(e, t, i) {
                     var a = t.commit
                       , n = t.getters
                       , r = (t.state,
-                    i.email);
+                    i.email)
+                      , s = i.subscription_list_id;
                     return a("CLEAR_SUBSCRIPTION"),
                     (0,
                     o.default)(n, "SDK", {}).subscribe({
                         body: {
                             email: r,
+                            subscription_list_id: s,
                             subscribe: !0
                         }
                     }).then(e.getOnSubscribeSuccess(a)).catch(e.getOnSubscribeError(a))
@@ -9305,7 +9382,7 @@ webpackJsonp([1], Array(54).concat([function(e, t, i) {
           , i = e._self._c || t;
         return i("div", {
             staticClass: "view-article"
-        }, [e.hasError && 0 === e.articles.length ? i("error404") : i("div", {
+        }, [e.hasError && e.isArticleEmpty ? i("error404") : i("div", {
             staticClass: "infinite-articles",
             attrs: {
                 id: "infinite-articles"
@@ -9528,6 +9605,10 @@ webpackJsonp([1], Array(54).concat([function(e, t, i) {
             hasError: function() {
                 return 200 !== (0,
                 s.default)(this, "$store.state.statusCode", 404)
+            },
+            isArticleEmpty: function() {
+                return 0 === (0,
+                s.default)(this, "$store.state.Article.articles[0].slug", "").length
             },
             isVideo: function() {
                 return "video" === (0,
@@ -10262,7 +10343,7 @@ webpackJsonp([1], Array(54).concat([function(e, t, i) {
                     slug: e.article.slug,
                     pinterest: !0
                 }
-            })], 1)], 2), "jwplayer" !== t.type || e.getIsMobile ? e._e() : i("article-jwplayer", {
+            })], 1)], 2), "jwplayer" !== t.type || e.getIsMobile || 0 !== e.index ? e._e() : i("article-jwplayer", {
                 attrs: {
                     videoLabel: t.videoLabel,
                     playerUrl: t.playerUrl,
@@ -11022,22 +11103,23 @@ webpackJsonp([1], Array(54).concat([function(e, t, i) {
                 })
             },
             display: function(e) {
-                var t = this
-                  , i = arguments.length > 1 && void 0 !== arguments[1] && arguments[1]
-                  , a = arguments.length > 2 && void 0 !== arguments[2] && arguments[2];
-                 // , n = this.getAmazonBids(e);
+              var t = this
+                , i = arguments.length > 1 && void 0 !== arguments[1] && arguments[1]
+                , a = this.getAmazonBids(e)
+                , notifyId = null
+                , divIds =  e.map(obj => obj.id);
 
-                console.log("Calling refreshbids", new Date());
-                t.refreshBids(e, i, a)
-                // console.log("Calling Amazon Fetchbids", new Date());
-                // window.apstag.fetchBids({
-                //     slots: n,
-                //     timeout: 2e3
-                // }, function(n) {
-                //     console.log("when does this function executes ?", new Date());
-                //     //console.log("Calling refreshbids", new Date());
-                //     //t.refreshBids(e, i, a)
-                // })
+              // On Some condition inclued out-of-page slot in div Array
+              i && divIds.push('out-of-page');
+              notifyId = window.OWT.registerExternalBidders(divIds);
+              t.refreshBids(e, i);
+              this.getAPSTag().fetchBids({
+                  slots: a,
+                  timeout: 900
+              }, function(a) {
+                  window.OWT.notifyExternalBiddingComplete(notifyId);
+                  // t.refreshBids(e, i)
+              })
             },
             getAmazonBids: function(e) {
                 var t = this;
@@ -11105,7 +11187,6 @@ webpackJsonp([1], Array(54).concat([function(e, t, i) {
                 return t.test(e) ? e.replace(t, "$1") : "none"
             },
             loadAPS: function() {
-                console.log("loading aps js file", new Date());
                 !function(e, t, i, a, n, r, o) {
                     function s(i, a) {
                         t[e]._Q.push([i, a])
@@ -11208,26 +11289,9 @@ webpackJsonp([1], Array(54).concat([function(e, t, i) {
             },
             refreshBids: function(e) {
                 var t = this
-                  , divIds =  e.map(obj => obj.id)                                                            // Added Code
-                  , notifyId = null                                                                                     // Added Code
                   , i = arguments.length > 1 && void 0 !== arguments[1] && arguments[1]
                   , a = arguments.length > 2 && void 0 !== arguments[2] && arguments[2];
                 window.googletag.cmd.push(function() {
-                    console.log("In refreshBids", new Date());
-                    console.log("Calling Amazon Fetchbids", new Date());
-                    divIds.push("out-of-page");
-                    notifyId = window.OWT.registerExternalBidders(divIds);
-                    window.apstag.fetchBids({
-                        slots: t.getAmazonBids(e),
-                        timeout: 900 // changed timeout for A9 from 2000
-                    }, function(n) {
-                        console.log("in fetchbids call-back", new Date());
-                        window.apstag.setDisplayBids()
-                        window.OWT.notifyExternalBiddingComplete(notifyId);
-                        //console.log("Calling refreshbids", new Date());
-                        //t.refreshBids(e, i, a)
-                    })
-                    console.log("Calling loadPubmaticAds", new Date());
                     t.loadPubmaticAds(e, i, a)
                 })
             },
@@ -11235,7 +11299,7 @@ webpackJsonp([1], Array(54).concat([function(e, t, i) {
                 var t = arguments.length > 1 && void 0 !== arguments[1] && arguments[1]
                   , i = arguments.length > 2 && void 0 !== arguments[2] && arguments[2]
                   , a = this.getSlotFromAdsArray(e);
-                console.log("in loadPubmaticAds", new Date());
+                window.apstag.setDisplayBids(),
                 e.forEach(function(e) {
                     window.googletag.display(e.id),
                     e.displayed = !0
@@ -11269,14 +11333,11 @@ webpackJsonp([1], Array(54).concat([function(e, t, i) {
                 n.default)(this, "$store.state.config.ads.GPT", {})
                   , t = (0,
                 n.default)(e, "pubmaticURL", "");
-                console.log("Loading pwt.js", new Date());
                 window.PWT = {},
                 window.googletag = window.googletag || {},
                 window.googletag.cmd = window.googletag.cmd || [],
                 window.PWT.jsLoaded = function() {
                     !function() {
-                        console.log("Loaded pwt.js", new Date());
-                        console.log("Loading gpt.js", new Date());
                         var e = document.createElement("script")
                           , t = "https:" == document.location.protocol;
                         e.src = (t ? "https:" : "http:") + "//www.googletagservices.com/tag/js/gpt.js";
@@ -11314,7 +11375,6 @@ webpackJsonp([1], Array(54).concat([function(e, t, i) {
                     Krux.segments = e("segs") && e("segs").split(",") || []
                 }(),
                 function(e, t, i, a, n, r, o) {
-                    console.log("Loading apstag.js", new Date());
                     function s(i, a) {
                         t[e]._Q.push([i, a])
                     }
@@ -11330,7 +11390,7 @@ webpackJsonp([1], Array(54).concat([function(e, t, i) {
                     },
                     r = i.createElement(a),
                     r.async = !0,
-                    r.src = "//c.amazon-adsystem.com/aax2/apstag.js", // this one is actually used.
+                    r.src = "//c.amazon-adsystem.com/aax2/apstag.js",
                     o = i.getElementsByTagName(a)[0],
                     o.parentNode.insertBefore(r, o))
                 }("apstag", window, document, "script"),
@@ -13623,12 +13683,20 @@ webpackJsonp([1], Array(54).concat([function(e, t, i) {
             value: function(e) {
                 var t = this
                   , i = arguments.length > 1 && void 0 !== arguments[1] && arguments[1]
-                  , a = this.getAmazonBids(e);
+                  , a = this.getAmazonBids(e)
+                  , notifyId = null
+                  , divIds =  e.map(obj => obj.id);
+
+                // On Some condition inclued out-of-page slot in div Array
+                i && divIds.push('out-of-page');
+                notifyId = window.OWT.registerExternalBidders(divIds);
+                t.refreshBids(e, i);
                 this.getAPSTag().fetchBids({
                     slots: a,
-                    timeout: 2e3
+                    timeout: 900
                 }, function(a) {
-                    t.refreshBids(e, i)
+                    window.OWT.notifyExternalBiddingComplete(notifyId);
+                    // t.refreshBids(e, i)
                 })
             }
         }, {
@@ -14041,16 +14109,23 @@ webpackJsonp([1], Array(54).concat([function(e, t, i) {
                 })
             },
             display: function(e) {
-                var t = this
-                  , i = arguments.length > 1 && void 0 !== arguments[1] && arguments[1]
-                  , a = this.getAmazonBids(e);
-                console.log("what does this code do ?????", new Date());
-                window.apstag.fetchBids({
-                    slots: a,
-                    timeout: 2e3
-                }, function(a) {
-                    t.refreshBids(e, i)
-                })
+              var t = this
+                , i = arguments.length > 1 && void 0 !== arguments[1] && arguments[1]
+                , a = this.getAmazonBids(e)
+                , notifyId = null
+                , divIds =  e.map(obj => obj.id);
+
+              // On Some condition inclued out-of-page slot in div Array
+              i && divIds.push('out-of-page');
+              notifyId = window.OWT.registerExternalBidders(divIds);
+              t.refreshBids(e, i);
+              this.getAPSTag().fetchBids({
+                  slots: a,
+                  timeout: 900
+              }, function(a) {
+                  window.OWT.notifyExternalBiddingComplete(notifyId);
+                  // t.refreshBids(e, i)
+              })
             },
             getAmazonBids: function(e) {
                 var t = this;
